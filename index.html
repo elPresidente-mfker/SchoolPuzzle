@@ -322,6 +322,16 @@ const GAMES = [
   desc: 'Das klassische Duell: Halte den Ball im Spiel und besiege deinen Gegner!',
   url: 'pong/index.html'
 },
+  {
+  name: 'Fruit Ninja',
+  icon: 'icons/ninja.png',
+  cat: 'action',
+  stars: 5,
+  isNew: true,
+  color: '#E8F5E9',
+  desc: 'Slice die Früchte und vermeide Bomben!',
+  url: 'https://verma-anushka.github.io/Fruit-Ninja/'
+},
 ];
 
 let currentCategory = 'all';
@@ -338,7 +348,10 @@ function renderGrid(games) {
   grid.innerHTML = games.map(g => `
     <div class="game-card" onclick='openGame(${JSON.stringify(g).replace(/'/g,"&#39;")})'>
       <div class="game-thumb" style="background:${g.color}">
-        <span>${g.icon}</span>
+        ${g.icon.includes('.png') || g.icon.includes('.jpg') || g.icon.includes('.svg')
+  ? `<img src="${g.icon}" style="width:44px;height:44px;object-fit:contain;">`
+  : `<span>${g.icon}</span>`
+}
         ${g.isNew ? '<span class="new-badge">NEU!</span>' : ''}
         <div class="thumb-overlay">
           <div class="play-circle"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
