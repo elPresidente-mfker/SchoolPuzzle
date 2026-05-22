@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    background: #202020;
+}
+
+.cookieWrapper {
+    position: relative;
+    width: 40%;
+    height: 100vh;
+    border: 2px solid rgb(255, 0, 0);
+    box-sizing: border-box;
+}
+
+#cookieCounter {
+    text-align: center;
+}
+
+.purchases {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.error {
+    word-wrap: break-word;
+}

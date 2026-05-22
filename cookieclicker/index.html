@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Clicker Clone</title>
+    <script src="js/script.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <noscript><meta http-equiv="refresh" content="0; url=noscript.html"></noscript>
+    <div class="cookieWrapper">
+        <img style="display: block;margin-left: auto;margin-right: auto;width: 50%;" src="img/cookie.png" alt="Mouse" id="cookie" width="350px" onclick="cookieClick()">
+        <h1 id="cookieCounter">Cookies: 0</h1>
+    </div>
+    <div class="purchases">
+        <h1 onclick="onPurchase('clicker')">Buy Mouse (-10)</h1>
+        <p id="error"></p>
+        <p id="clickerCount">You have 0 mice</p>
+        <h1 onclick="onPurchase('grandma')">Buy grandma (-50)</h1>
+        <p id="grandmaError"></p>
+        <p id="grandmaCount">You have 0 grandmas</p>
+    </div>
+</body>
+</html>
