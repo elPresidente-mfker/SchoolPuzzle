@@ -342,14 +342,14 @@ const GAMES = [
   desc: 'Springe durch Level, sammle Coins und rette die Prinzessin!',
   url: 'mario/index.html'
 },
-  {
+{
   name: 'Agar.io',
   icon: '🦠',
   cat: 'action',
   stars: 5,
   isNew: false,
   color: '#E3F2FD',
-  desc: 'Fresse kleinere Zellen und wachse!',
+  desc: 'Fresse kleinere Zellen und werde die größte Zelle!',
   url: 'https://agar.io',
   external: true
 },
@@ -393,8 +393,12 @@ function renderGrid(games) {
     return;
   }
 
+  document.getElementById('modal-icon').textContent = g.icon;
+  document.getElementById('modal-name').textContent = g.name;
+  document.getElementById('modal-desc').textContent = g.desc;
   document.getElementById('game-frame').src = g.url;
   document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
 function setCategory(cat, el) {
