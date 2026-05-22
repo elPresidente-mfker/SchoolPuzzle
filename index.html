@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SchoolPuzzle – Kostenlose Unblocked Browser-Spiele</title>
+  <meta name="description" content="SchoolPuzzle – Spiele die besten kostenlosen Browser-Spiele direkt in der Schule! Kein Download, keine Installation.">
+  <meta name="keywords" content="unblocked games, school games, browser games, kostenlos, puzzle, arcade, 2048, hextris, tetris, pacman, flappy bird, snake">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --yellow:#FFD93D; --orange:#FF6B35; --pink:#FF6B9D;
+      --blue:#4ECDC4; --purple:#A855F7; --green:#6BCB77;
+      --bg:#FFF8F0; --bg2:#FFFFFF; --text:#2D2D2D; --muted:#888;
+      --radius:16px; --shadow:0 4px 20px rgba(0,0,0,0.08);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 10% 20%,#FFD93D22 0%,transparent 40%),radial-gradient(circle at 90% 80%,#FF6B9D22 0%,transparent 40%),radial-gradient(circle at 50% 50%,#4ECDC422 0%,transparent 50%);pointer-events:none;z-index:0;}
+
+    header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);border-bottom:3px solid var(--yellow);padding:0 24px;height:64px;display:flex;align-items:center;gap:16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+    .logo{font-family:'Fredoka One',cursive;font-size:26px;text-decoration:none;background:linear-gradient(135deg,var(--orange),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;}
+    .search-wrap{flex:1;max-width:340px;position:relative;}
+    .search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2.5;}
+    #search{width:100%;background:var(--bg);border:2.5px solid #E8E8E8;border-radius:40px;padding:9px 14px 9px 36px;color:var(--text);font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+    #search:focus{border-color:var(--orange);box-shadow:0 0 0 3px #FF6B3522;}
+    #search::placeholder{color:#bbb;}
+    .panic-btn{display:flex;align-items:center;gap:6px;background:var(--green);color:#fff;border:none;border-radius:40px;padding:8px 16px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;white-space:nowrap;box-shadow:0 3px 0 #4a9954;}
+    .panic-btn:hover{transform:translateY(-2px);box-shadow:0 5px 0 #4a9954;}
+
+    #panic-screen{display:none;position:fixed;inset:0;background:#fff;z-index:9999;padding:40px;font-family:'Times New Roman',serif;}
+    #panic-screen.show{display:block;}
+    .panic-title{font-size:28px;font-weight:bold;margin-bottom:20px;}
+    .panic-text{font-size:16px;line-height:2;color:#333;}
+    .panic-hint{position:fixed;bottom:20px;right:20px;font-size:12px;color:#ccc;font-family:sans-serif;}
+
+    .hero{position:relative;z-index:1;margin:20px 24px;background:linear-gradient(135deg,#FFD93D,#FF6B35);border-radius:24px;padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px;box-shadow:0 8px 32px #FF6B3533;overflow:hidden;}
+    .hero::after{content:'';position:absolute;top:-30px;right:-30px;width:200px;height:200px;background:rgba(255,255,255,0.15);border-radius:50%;}
+    .hero-text h1{font-family:'Fredoka One',cursive;font-size:28px;color:#fff;margin-bottom:6px;line-height:1.2;}
+    .hero-text p{font-size:14px;color:rgba(255,255,255,0.9);margin-bottom:16px;font-weight:600;}
+    .hero-btn{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--orange);border:none;border-radius:40px;padding:10px 22px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,0.1);transition:transform 0.15s,box-shadow 0.15s;}
+    .hero-btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 rgba(0,0,0,0.1);}
+    .hero-emoji{font-size:80px;line-height:1;flex-shrink:0;z-index:1;}
+
+    .tip-bar{position:relative;z-index:1;margin:0 24px 16px;background:#E8F5FF;border:2px solid #BAE3FF;border-radius:12px;padding:10px 16px;font-size:13px;font-weight:700;color:#2D7DD2;display:flex;align-items:center;gap:8px;}
+
+    .nav-pills{position:relative;z-index:1;display:flex;gap:8px;padding:4px 24px 16px;overflow-x:auto;scrollbar-width:none;}
+    .nav-pills::-webkit-scrollbar{display:none;}
+    .pill{background:#fff;border:2.5px solid #E8E8E8;border-radius:40px;padding:7px 18px;font-size:13px;font-family:'Nunito',sans-serif;font-weight:700;color:var(--muted);white-space:nowrap;cursor:pointer;transition:all 0.15s;box-shadow:0 2px 0 #E8E8E8;}
+    .pill:hover{border-color:var(--orange);color:var(--orange);}
+    .pill.active{background:var(--orange);border-color:var(--orange);color:#fff;box-shadow:0 3px 0 #cc4f1e;}
+
+    .ad-slot{position:relative;z-index:1;margin:0 24px 20px;background:#fff;border:2px dashed #E8E8E8;border-radius:12px;padding:12px 16px;text-align:center;font-size:12px;font-weight:600;color:#ccc;}
+
+    .stats-bar{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 24px 20px;}
+    .stat-card{background:#fff;border-radius:var(--radius);padding:14px;text-align:center;box-shadow:var(--shadow);border:2px solid transparent;}
+    .stat-card:nth-child(1){border-color:#FFD93D;}
+    .stat-card:nth-child(2){border-color:#4ECDC4;}
+    .stat-card:nth-child(3){border-color:#6BCB77;}
+    .stat-num{font-family:'Fredoka One',cursive;font-size:26px;color:var(--orange);}
+    .stat-label{font-size:11px;font-weight:700;color:var(--muted);margin-top:2px;}
+
+    .section-header{position:relative;z-index:1;display:flex;align-items:center;gap:10px;padding:4px 24px 14px;}
+    .section-header h2{font-family:'Fredoka One',cursive;font-size:20px;color:var(--text);}
+    .section-badge{background:var(--yellow);color:#7a5c00;font-size:11px;font-weight:800;padding:3px 10px;border-radius:40px;}
+
+    .games-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;padding:0 24px 28px;}
+    .game-card{background:#fff;border-radius:20px;overflow:hidden;cursor:pointer;box-shadow:0 4px 0 #E0E0E0;border:2.5px solid transparent;transition:transform 0.18s,box-shadow 0.18s,border-color 0.18s;}
+    .game-card:hover{transform:translateY(-5px);box-shadow:0 8px 0 #E0E0E0;border-color:var(--orange);}
+    .game-thumb{width:100%;height:100px;display:flex;align-items:center;justify-content:center;font-size:44px;position:relative;}
+    .thumb-overlay{position:absolute;inset:0;background:rgba(255,107,53,0.15);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.15s;}
+    .game-card:hover .thumb-overlay{opacity:1;}
+    .play-circle{width:40px;height:40px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px #FF6B3566;}
+    .play-circle svg{width:16px;height:16px;fill:#fff;}
+    .game-body{padding:10px 12px 12px;}
+    .game-name{font-size:13px;font-weight:800;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .game-footer{display:flex;align-items:center;justify-content:space-between;}
+    .game-tag{font-size:10px;font-weight:700;padding:3px 8px;border-radius:40px;background:var(--bg);color:var(--muted);}
+    .stars{font-size:11px;color:#FFB800;letter-spacing:-1px;}
+    .new-badge{position:absolute;top:8px;right:8px;background:var(--pink);color:#fff;font-size:10px;font-weight:800;padding:2px 8px;border-radius:40px;font-family:'Nunito',sans-serif;}
+
+    #modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;align-items:center;justify-content:center;padding:20px;}
+    #modal.open{display:flex;}
+    .modal-box{background:#fff;border-radius:24px;width:100%;max-width:820px;overflow:hidden;animation:modalIn 0.2s ease;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+    @keyframes modalIn{from{opacity:0;transform:scale(0.95) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);}}
+    .modal-header{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,var(--yellow),var(--orange));}
+    .modal-title{font-family:'Fredoka One',cursive;font-size:20px;color:#fff;display:flex;align-items:center;gap:10px;}
+    .modal-controls{display:flex;gap:8px;align-items:center;}
+    .modal-btn{background:rgba(255,255,255,0.25);border:2px solid rgba(255,255,255,0.4);border-radius:10px;color:#fff;padding:6px 12px;cursor:pointer;font-size:12px;font-weight:800;font-family:'Nunito',sans-serif;transition:background 0.15s;}
+    .modal-btn:hover{background:rgba(255,255,255,0.4);}
+    #game-frame{width:100%;height:500px;border:none;display:block;background:#f5f5f5;}
+    .modal-footer{padding:10px 20px;display:flex;align-items:center;justify-content:space-between;background:var(--bg);border-top:2px solid #F0F0F0;}
+    .modal-desc{font-size:13px;font-weight:600;color:var(--muted);}
+    .license-badge{background:#E8F5E9;color:#2E7D32;padding:4px 12px;border-radius:40px;font-size:12px;font-weight:800;}
+
+    .no-results{grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:15px;font-weight:700;}
+
+    footer{position:relative;z-index:1;border-top:3px solid var(--yellow);background:#fff;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700;color:var(--muted);flex-wrap:wrap;gap:8px;}
+    footer a{color:var(--orange);text-decoration:none;}
+    footer a:hover{text-decoration:underline;}
+
+    @media(max-width:600px){
+      header{padding:0 14px;gap:10px;}
+      .hero{padding:22px 20px;margin:14px;}
+      .hero-emoji{display:none;}
+      .games-grid{padding:0 14px 20px;}
+      .section-header{padding:4px 14px 12px;}
+      .nav-pills{padding:4px 14px 14px;}
+      .stats-bar,.ad-slot,.tip-bar{margin-left:14px;margin-right:14px;}
+      #game-frame{height:360px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- PANIC SCREEN -->
+<div id="panic-screen">
+  <div class="panic-title">Kapitel 4: Ökosysteme und Biodiversität</div>
+  <div class="panic-text">
+    Ein Ökosystem ist eine Gemeinschaft lebender Organismen in Verbindung mit den nicht lebenden Komponenten ihrer Umgebung, die als System interagieren.<br><br>
+    <strong>Lernziele:</strong><br>
+    – Definition und Merkmale von Ökosystemen<br>
+    – Biotische und abiotische Faktoren<br>
+    – Nahrungsketten und Nahrungsnetze<br>
+    – Energiefluss im Ökosystem<br>
+    – Biodiversität und ihre Bedeutung<br><br>
+    <strong>Aufgabe 1:</strong> Beschreibe drei biotische und drei abiotische Faktoren eines Waldökosystems.<br><br>
+    <strong>Aufgabe 2:</strong> Zeichne eine Nahrungskette mit mindestens vier Gliedern.<br><br>
+    Die Biodiversität bezeichnet die Vielfalt des Lebens auf der Erde. Sie umfasst die genetische Vielfalt innerhalb von Arten, die Artenvielfalt und die Vielfalt der Ökosysteme...
+  </div>
+  <div class="panic-hint">Drücke ESC zum Zurückkehren</div>
+</div>
+
+<header>
+  <a href="index.html" class="logo">🧩 SchoolPuzzle</a>
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search" placeholder="Spiel suchen..." oninput="filterBySearch()">
+  </div>
+  <button class="panic-btn" onclick="activatePanic()">🚨 Lehrer kommt!</button>
+</header>
+
+<nav class="nav-pills">
+  <button class="pill active" onclick="setCategory('all',this)">🎮 Alle</button>
+  <button class="pill" onclick="setCategory('puzzle',this)">🧩 Puzzle</button>
+  <button class="pill" onclick="setCategory('arcade',this)">👾 Arcade</button>
+  <button class="pill" onclick="setCategory('action',this)">⚡ Action</button>
+  <button class="pill" onclick="setCategory('strategie',this)">♟️ Strategie</button>
+  <button class="pill" onclick="setCategory('wörter',this)">💬 Wörter</button>
+</nav>
+
+<div class="hero">
+  <div class="hero-text">
+    <h1>Spielen & Lernen –<br>ohne Sperren! 🎉</h1>
+    <p>Kostenlos, kein Download, direkt im Browser – 7 Spiele warten!</p>
+    <button class="hero-btn" onclick="document.getElementById('main-grid').scrollIntoView({behavior:'smooth'})">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+      Jetzt spielen!
+    </button>
+  </div>
+  <div class="hero-emoji">🕹️</div>
+</div>
+
+<div class="tip-bar">
+  💡 <span><strong>Tipp:</strong> Drücke 🚨 wenn ein Lehrer kommt – sofort Schularbeits-Modus! Oder drücke die <strong>~</strong> Taste.</span>
+</div>
+
+<div class="ad-slot">
+  <!-- Google AdSense: <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXX" crossorigin="anonymous"></script> -->
+  [ Werbeanzeige 728×90 — AdSense Code hier einfügen ]
+</div>
+
+<div class="stats-bar">
+  <div class="stat-card"><div class="stat-num" id="game-count">7</div><div class="stat-label">🎮 Spiele</div></div>
+  <div class="stat-card"><div class="stat-num" id="players-stat">1.4k</div><div class="stat-label">👦 Online</div></div>
+  <div class="stat-card"><div class="stat-num">100%</div><div class="stat-label">✅ Kostenlos</div></div>
+</div>
+
+<div class="section-header">
+  <span>🔥</span><h2>Alle Spiele</h2><span class="section-badge">Direkt spielbar!</span>
+</div>
+<div class="games-grid" id="main-grid"></div>
+
+<div class="ad-slot">
+  <!-- Google AdSense 300x250 hier einfügen -->
+  [ Werbeanzeige 300×250 — AdSense Code hier einfügen ]
+</div>
+
+<footer>
+  <span>© 2025 SchoolPuzzle – Kostenlose Unblocked Browser-Spiele 🧩</span>
+  <span><a href="#">Datenschutz</a> · <a href="#">Impressum</a> · <a href="#">Kontakt</a> · <a href="#">Spiel vorschlagen</a></span>
+</footer>
+
+<div id="modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title"><span id="modal-icon"></span><span id="modal-name"></span></div>
+      <div class="modal-controls">
+        <button class="modal-btn" onclick="goFullscreen()">⛶ Vollbild</button>
+        <button class="modal-btn" onclick="closeModal()">✕ Schließen</button>
+      </div>
+    </div>
+    <iframe id="game-frame" allowfullscreen allow="fullscreen; autoplay"></iframe>
+    <div class="modal-footer">
+      <span class="modal-desc" id="modal-desc"></span>
+      <span class="license-badge">✓ Open Source</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const GAMES = [
+  // Bestehende Spiele
+  {
+    name: '2048',
+    icon: '🔢', cat: 'puzzle', stars: 5, isNew: false,
+    color: '#FFF3CD',
+    desc: 'Kombiniere Zahlen bis du 2048 erreichst – super süchtig machend!',
+    url: '2048/index.html'
+  },
+  {
+    name: 'Hextris',
+    icon: '🔷', cat: 'puzzle', stars: 5, isNew: false,
+    color: '#E8F4FD',
+    desc: 'Schnelles Puzzle-Spiel auf einem Hexagon – wer schafft den Highscore?',
+    url: 'hextris/index.html'
+  },
+  {
+    name: 'Tetris',
+    icon: '🟦', cat: 'arcade', stars: 5, isNew: false,
+    color: '#EDE7F6',
+    desc: 'Das klassische Tetris – Blöcke stapeln und Reihen löschen!',
+    url: 'tetris/index.html'
+  },
+  // Neue Spiele
+  {
+    name: 'Flappy Bird',
+    icon: '🐦', cat: 'action', stars: 5, isNew: true,
+    color: '#E8F5E9',
+    desc: 'Fliege durch Hindernisse – einfach zu lernen, schwer zu meistern!',
+    url: 'flappybird/index.html'
+  },
+  {
+    name: 'Pacman',
+    icon: '🟡', cat: 'arcade', stars: 5, isNew: true,
+    color: '#FFF9C4',
+    desc: 'Friss alle Punkte, weiche den Geistern aus – der Klassiker!',
+    url: 'pacman/index.htm'
+  },
+  {
+    name: 'Snake',
+    icon: '🐍', cat: 'action', stars: 4, isNew: true,
+    color: '#F1F8E9',
+    desc: 'Lass die Schlange wachsen ohne dich selbst zu treffen!',
+    url: 'snake/index.html'
+  },
+  {
+    name: 'Chess',
+    icon: '♟️', cat: 'strategie', stars: 5, isNew: true,
+    color: '#F3E5F5',
+    desc: 'Schach gegen eine starke KI – fordere dein Denkvermögen heraus!',
+    url: 'https://lichess.org/training'
+  },
+];
+
+let currentCategory = 'all';
+
+function starsHtml(n){ return '★'.repeat(n) + '☆'.repeat(5-n); }
+
+function renderGrid(games) {
+  const grid = document.getElementById('main-grid');
+  document.getElementById('game-count').textContent = GAMES.length;
+  if (!games.length) {
+    grid.innerHTML = '<div class="no-results">😅 Kein Spiel gefunden – versuch einen anderen Begriff!</div>';
+    return;
+  }
+  grid.innerHTML = games.map(g => `
+    <div class="game-card" onclick='openGame(${JSON.stringify(g).replace(/'/g,"&#39;")})'>
+      <div class="game-thumb" style="background:${g.color}">
+        <span>${g.icon}</span>
+        ${g.isNew ? '<span class="new-badge">NEU!</span>' : ''}
+        <div class="thumb-overlay">
+          <div class="play-circle"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        </div>
+      </div>
+      <div class="game-body">
+        <div class="game-name">${g.name}</div>
+        <div class="game-footer">
+          <span class="game-tag">${g.cat}</span>
+          <span class="stars">${starsHtml(g.stars)}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function setCategory(cat, el) {
+  currentCategory = cat;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('search').value = '';
+  renderGrid(cat === 'all' ? GAMES : GAMES.filter(g => g.cat === cat));
+}
+
+function filterBySearch() {
+  const q = document.getElementById('search').value.toLowerCase();
+  renderGrid(q
+    ? GAMES.filter(g => g.name.toLowerCase().includes(q) || g.cat.toLowerCase().includes(q) || g.desc.toLowerCase().includes(q))
+    : (currentCategory === 'all' ? GAMES : GAMES.filter(g => g.cat === currentCategory)));
+}
+
+function openGame(g) {
+  document.getElementById('modal-icon').textContent = g.icon;
+  document.getElementById('modal-name').textContent = g.name;
+  document.getElementById('modal-desc').textContent = g.desc;
+  document.getElementById('game-frame').src = g.url;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('game-frame').src = '';
+  document.body.style.overflow = '';
+}
+
+function goFullscreen() {
+  const f = document.getElementById('game-frame');
+  if (f.requestFullscreen) f.requestFullscreen();
+  else if (f.webkitRequestFullscreen) f.webkitRequestFullscreen();
+}
+
+function activatePanic() {
+  document.getElementById('panic-screen').classList.add('show');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('panic-screen').classList.remove('show');
+    closeModal();
+  }
+  if (e.key === '`' || e.key === '~') activatePanic();
+});
+
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+setInterval(() => {
+  const c = 900 + Math.floor(Math.random() * 600);
+  document.getElementById('players-stat').textContent = (c/1000).toFixed(1) + 'k';
+}, 8000);
+
+renderGrid(GAMES);
+</script>
+</body>
+</html>
