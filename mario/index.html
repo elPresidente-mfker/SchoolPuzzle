@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Mario Clone">
+    <meta name="theme-color" content="#E52521">
+    <link rel="manifest" href="manifest.json?v=2">
+    <title>Mario Clone - Touch Edition</title>
+    <link rel="stylesheet" href="styles.css?v=2">
+    <script>
+        // Force service worker update on page load
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+                registrations.forEach(registration => registration.update());
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        <div id="touch-controls">
+            <div class="controls-left">
+                <button id="btn-left" class="control-btn direction-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                </button>
+                <button id="btn-right" class="control-btn direction-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="controls-right">
+                <button id="btn-jump" class="control-btn action-btn">
+                    <span>JUMP</span>
+                </button>
+            </div>
+        </div>
+        <div id="game-ui">
+            <div class="score">Score: <span id="score">0</span></div>
+            <div class="coins">Coins: <span id="coins">0</span></div>
+            <div class="lives">Lives: <span id="lives">3</span></div>
+        </div>
+        <div id="leaderboard" class="leaderboard hidden">
+            <h3>Top Players</h3>
+            <div id="leaderboard-list"></div>
+        </div>
+        <div id="start-screen" class="screen">
+            <h1>Mario Clone</h1>
+            <p>Multiplayer Edition</p>
+            <div id="all-time-leaderboard" class="all-time-leaderboard">
+                <h3>🏆 All-Time Best</h3>
+                <div id="all-time-list"></div>
+            </div>
+            <input type="text" id="player-name" class="name-input" placeholder="Enter your name..." maxlength="15" autocomplete="off">
+            <button id="start-btn" class="menu-btn">Start Game</button>
+        </div>
+        <div id="game-over-screen" class="screen hidden">
+            <h1>Game Over</h1>
+            <p>Final Score: <span id="final-score">0</span></p>
+            <button id="restart-btn" class="menu-btn">Play Again</button>
+        </div>
+        <div id="out-of-lives-screen" class="screen hidden">
+            <h1>Out of Lives!</h1>
+            <p>You can rejoin in <span id="respawn-countdown">10</span> seconds</p>
+            <p class="continue-hint" id="continue-hint">Or use your one-time continue?</p>
+            <button id="continue-btn" class="menu-btn continue-btn">Continue (<span id="continue-countdown">5</span>s)</button>
+            <button id="restart-from-zero-btn" class="menu-btn secondary-btn">Restart (Score → 0)</button>
+        </div>
+    </div>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDPGKgsAlCN4t9aJvrN5oD6qWFohV-RGps",
+            authDomain: "marioish.firebaseapp.com",
+            databaseURL: "https://marioish-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "marioish",
+            storageBucket: "marioish.firebasestorage.app",
+            messagingSenderId: "508377537303",
+            appId: "1:508377537303:web:829c07cfa7f40eec76b552"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+    </script>
+    <script src="game.js?v=2"></script>
+    <script>
+        // Register service worker for PWA support with auto-update
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/Mario-clone/sw.js?v=2')
+                    .then(reg => {
+                        console.log('Service Worker registered');
+
+                        // Check for updates every 60 seconds
+                        setInterval(() => {
+                            reg.update();
+                        }, 60000);
+
+                        // Listen for updates
+                        reg.addEventListener('updatefound', () => {
+                            const newWorker = reg.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'activated') {
+                                    console.log('New version available! Reloading...');
+                                    window.location.reload();
+                                }
+                            });
+                        });
+                    })
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            });
+        }
+    </script>
+</body>
+</html>
